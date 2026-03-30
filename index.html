@@ -274,6 +274,7 @@
   }
   .main-tab:first-child { border-radius: 12px 0 0 12px; }
   .main-tab:last-child { border-radius: 0 12px 12px 0; }
+  .main-tab:nth-child(2) { border-left: none; border-right: none; }
   .main-tab.active {
     background: linear-gradient(135deg, var(--pink), var(--lavender));
     color: white; border-color: var(--pink);
@@ -318,6 +319,36 @@
   .cast-table .no-data { color: #ccc; }
   .cast-table .sun { color: #F97BBD; }
   .cast-table .sat { color: #87CEEA; }
+
+  /* ── ファンスタジオ一覧 ── */
+  .fs-list { display: flex; flex-direction: column; gap: 10px; }
+  .fs-row {
+    display: flex; align-items: center; gap: 12px;
+    background: white; border-radius: 14px; padding: 10px 14px;
+    box-shadow: 0 1px 8px rgba(249,123,189,0.08);
+    border: 1px solid rgba(249,123,189,0.1);
+  }
+  .fs-row.fs-month-header {
+    background: linear-gradient(135deg, rgba(249,123,189,0.12), rgba(200,180,232,0.1));
+    font-weight: 900; font-size: 15px; justify-content: center;
+    border: none; box-shadow: none; padding: 8px;
+  }
+  .fs-date { font-weight: 900; font-size: 13px; min-width: 70px; flex-shrink: 0; }
+  .fs-date.sun { color: #F97BBD; }
+  .fs-date.sat { color: #87CEEA; }
+  .fs-studios { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
+  .fs-studio-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text);
+  }
+  .fs-studio-label {
+    font-size: 10px; font-weight: 900; color: white;
+    padding: 2px 6px; border-radius: 6px; flex-shrink: 0;
+  }
+  .fs-s101 { background: var(--pink2); }
+  .fs-s102 { background: var(--sky); }
+  .fs-s103 { background: var(--mint); }
+  .fs-char-img { width: 80px; height: 28px; object-fit: contain; border-radius: 4px; }
 
   @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
   @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
@@ -391,8 +422,9 @@
 
   <!-- メインタブ -->
   <div class="main-tabs">
-    <button class="main-tab active" onclick="switchMainTab('schedule')">&#x1F4C5; 今日のスケジュール</button>
-    <button class="main-tab" onclick="switchMainTab('cast')">&#x1F3AD; 出演キャラ一覧</button>
+    <button class="main-tab active" onclick="switchMainTab('schedule')">&#x1F4C5; スケジュール</button>
+    <button class="main-tab" onclick="switchMainTab('cast')">&#x1F3AD; 出演キャラ</button>
+    <button class="main-tab" onclick="switchMainTab('studio')">&#x1F3E0; ファンスタジオ</button>
   </div>
 
   <!-- タブ1: 今日のスケジュール -->
@@ -467,6 +499,16 @@
     </div>
   </div><!-- /tab-cast -->
 
+  <!-- タブ3: ファンスタジオ一覧 -->
+  <div class="tab-content" id="tab-studio">
+    <div class="section-title" style="margin-bottom:8px">3月〜4月 キャラクタースケジュール</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;text-align:center;">
+      各日のスタジオ101号室・102号室に登場するキャラクター<br>
+      <a href="https://www.harmonyland.jp/sp/funstudio/c_schedule.html" target="_blank" style="color:var(--pink2);">公式ファンスタジオページ</a>
+    </p>
+    <div class="fs-list" id="fs-list"></div>
+  </div><!-- /tab-studio -->
+
   <footer>
     <p>データ出典: <a href="https://www.harmonyland.jp/" target="_blank">ハーモニーランド 公式サイト</a></p>
     <p style="margin-top:4px">スケジュールは予告なく変更される場合があります。最新情報は公式サイトをご確認ください。</p>
@@ -513,27 +555,30 @@ var PDF_SCHEDULE = {
     }
   },
   '2026-04': {
-    closed: [8, 9, 15, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+    closed: [8, 9, 15, 22, 23],
     hours: '10:00 ~ 17:00',
     pdfs: {
-      1:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/5a81331cf56fe888e123a42101e39b88.pdf',
-      2:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/52639c9f7397bea6282ca4df4dc3efc3.pdf',
-      3:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/1439a576f87d4fc5ded879fe590d0b0c.pdf',
-      4:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/8c66f5d14397e96ed0b9b4abb210b0f0.pdf',
-      5:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/b71e3800d1067558e5b1c3be7c8474dd.pdf',
-      6:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/5cda5db56d9f8ec2c0bdac8cdb0aaf87.pdf',
+      1:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/fb384e6620192d8b8e2cf60a7c93c7f5.pdf',
+      2:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/b85fe898e4f855158d07c050964dfc6f.pdf',
+      3:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/0d10e23fe3f24129ca7b43b451d81b59.pdf',
+      4:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/4120a98999ed1d908d9cc5492df20b91.pdf',
+      5:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/3f57bc313b9792f1c31031cc25bef049.pdf',
+      6:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/5df775d56248a748f39d69f78e89673d.pdf',
       7:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/1326b848b7844ff5c860f7c5b7818e75.pdf',
       10: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/2c4afffeba5e30a26cfde66c5cfc34e7.pdf',
-      11: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/6e8743340553ad79e7931cd3b04cb280.pdf',
-      12: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/0e06c5d135e7ec0b254b496b1fa81d38.pdf',
+      11: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/9cf825fe20e7c8edb50b4e034ebea246.pdf',
+      12: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/8ed683462ad4ac011ee6c71e1f850fcc.pdf',
       13: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/8afb752f2e1115fa8768d5cf5d507d60.pdf',
       14: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/13bcc3a23dcf5e95d31b7d4826f79d9d.pdf',
       16: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/16ee3ae7a50a5c60f63759d91550e619.pdf',
       17: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/2abece0e0a3c869b99cbf9a599dfb6b2.pdf',
-      18: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/ed55e533df2942d52c6393f7b627c58a.pdf',
-      19: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/8440a697d24449aae17d1134f09929f3.pdf',
+      18: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/024696bd3bffcce9146176c1f94ca853.pdf',
+      19: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/15bf9b102a6ce00b1a95397a3e0a9a05.pdf',
       20: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/d681b9dc749e9590f28ccd430eec11a0.pdf',
-      21: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/0d5019909cda0247956a587cab6cc71e.pdf'
+      21: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/0d5019909cda0247956a587cab6cc71e.pdf',
+      24: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/c99dae1931bfa58c870bbcd117931b37.pdf',
+      25: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/64570970d62529670e24c8ae18eddc69.pdf',
+      26: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/c0d6523d172d3f6836251b982b360755.pdf'
     }
   }
 };
@@ -987,12 +1032,115 @@ function render() {
 //  メインタブ切り替え
 // ══════════════════════════════════════════════════
 function switchMainTab(tabName) {
+  var tabs = ['schedule', 'cast', 'studio'];
   document.querySelectorAll('.main-tab').forEach(function(btn, i) {
-    btn.classList.toggle('active', (tabName === 'schedule' && i === 0) || (tabName === 'cast' && i === 1));
+    btn.classList.toggle('active', tabName === tabs[i]);
   });
-  document.getElementById('tab-schedule').classList.toggle('active', tabName === 'schedule');
-  document.getElementById('tab-cast').classList.toggle('active', tabName === 'cast');
+  tabs.forEach(function(t) {
+    var el = document.getElementById('tab-' + t);
+    if (el) el.classList.toggle('active', t === tabName);
+  });
   if (tabName === 'cast') renderCastTable();
+  if (tabName === 'studio') renderStudioList();
+}
+
+// ══════════════════════════════════════════════════
+//  ファンスタジオ キャラクターデータ
+// ══════════════════════════════════════════════════
+var FS_CHAR_BASE = 'https://www.harmonyland.jp/sp/funstudio/images/';
+var FS_DATA = {
+  '0315':{'101':'mmkuwi','102':'cnpnkr'},
+  '0316':{'101':'mmkuwi','102':'cnpnkr'},
+  '0317':{'101':'mmkuus','102':'cnpntx'},
+  '0318':{'101':'mmkuus','102':'cnpntx'},
+  '0320':{'101':'mmkuus','102':'cnpntx'},
+  '0321':{'101':'mmkubo02','102':'cnpnxo'},
+  '0322':{'101':'mmkubo02','102':'cnpnxo'},
+  '0323':{'101':'mmkubo02','102':'cnpnxo'},
+  '0324':{'101':'mmkujl','102':'cnpnmf'},
+  '0325':{'101':'mmkujl','102':'cnpnmf'},
+  '0326':{'101':'mmkujl','102':'cnpnmf'},
+  '0327':{'101':'mmkujl','102':'cnpnmf'},
+  '0328':{'101':'mmkump02','102':'cnpnck'},
+  '0329':{'101':'mmkump02','102':'cnpnck'},
+  '0330':{'101':'mmkump02','102':'cnpnck'},
+  '0331':{'101':'mmkump02','102':'cnpnck'},
+  '0401':{'101':'mmkuap','102':'cnpnxo'},
+  '0402':{'101':'mmkuap','102':'cnpnxo'},
+  '0403':{'101':'mmkuap','102':'cnpnxo'},
+  '0404':{'101':'mmkuap','102':'cnpnxo'},
+  '0405':{'101':'mmkutx','102':'cnpnxo'},
+  '0406':{'101':'mmkutx','102':'cnpnxo'},
+  '0407':{'101':'mmkutx','102':'cnpnxo'},
+  '0410':{'101':'mmkumocha','102':'cnpnchiffon'},
+  '0411':{'101':'mmkumocha','102':'cnpnchiffon'},
+  '0412':{'101':'mmkumocha','102':'cnpnchiffon'},
+  '0413':{'101':'mmkumimi','102':'cnpndn'},
+  '0414':{'101':'mmkumimi','102':'cnpndn'},
+  '0416':{'101':'mmkumimi','102':'cnpndn'},
+  '0417':{'101':'mmkumimi','102':'cnpndn'},
+  '0418':{'101':'mmkuus','102':'cnpnck'},
+  '0419':{'101':'mmkuus','102':'cnpnck'},
+  '0420':{'101':'mmkuus','102':'cnpnck'},
+  '0421':{'101':'mmkuus','102':'cnpnck'},
+  '0424':{'101':'mmku','102':'cnpn','103':'esjlmilk'},
+  '0425':{'101':'mmku','102':'cnpn','103':'esjlmilk'},
+  '0426':{'101':'mmku','102':'cnpn','103':'esjlmilk'},
+  '0427':{'101':'mmkump02','102':'cnpnmf'},
+  '0428':{'101':'mmkump02','102':'cnpnmf'},
+  '0429':{'101':'mmku','102':'cnpn','103':'mpmfbo'},
+  '0430':{'101':'mmkump02','102':'cnpnmf'}
+};
+
+var studioListRendered = false;
+function renderStudioList() {
+  if (studioListRendered) return;
+  studioListRendered = true;
+  var container = document.getElementById('fs-list');
+  var html = '';
+  var months = [
+    { m: 3, label: '3月', startDay: 15, endDay: 31 },
+    { m: 4, label: '4月', startDay: 1, endDay: 30 }
+  ];
+  var closedDays = { 3: [5,11,12,19], 4: [8,9,15,22,23] };
+
+  months.forEach(function(mo) {
+    html += '<div class="fs-row fs-month-header">' + mo.label + '</div>';
+    for (var d = mo.startDay; d <= mo.endDay; d++) {
+      var key = String(mo.m).padStart(2,'0') + String(d).padStart(2,'0');
+      var dt = new Date(2026, mo.m - 1, d);
+      var dow = dt.getDay();
+      var wd = WEEKDAYS[dow];
+      var dowClass = dow === 0 ? ' sun' : dow === 6 ? ' sat' : '';
+      var isCl = (closedDays[mo.m] || []).indexOf(d) >= 0;
+
+      if (isCl) {
+        html += '<div class="fs-row" style="opacity:0.4">';
+        html += '<div class="fs-date' + dowClass + '">' + mo.m + '/' + d + '(' + wd + ')</div>';
+        html += '<div style="color:var(--muted);font-size:12px">休園日</div>';
+        html += '</div>';
+        continue;
+      }
+
+      var data = FS_DATA[key];
+      if (!data) continue;
+
+      html += '<div class="fs-row">';
+      html += '<div class="fs-date' + dowClass + '">' + mo.m + '/' + d + '(' + wd + ')</div>';
+      html += '<div class="fs-studios">';
+      ['101','102','103'].forEach(function(room) {
+        if (!data[room]) return;
+        var charId = data[room];
+        var labelCls = 'fs-s' + room;
+        html += '<div class="fs-studio-item">';
+        html += '<span class="fs-studio-label ' + labelCls + '">' + room + '</span>';
+        html += '<img class="fs-char-img" src="' + FS_CHAR_BASE + 'fs_' + charId + '.png" alt="' + charId + '" loading="lazy">';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    }
+  });
+  container.innerHTML = html;
 }
 
 // ══════════════════════════════════════════════════
