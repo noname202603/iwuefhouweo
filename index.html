@@ -557,6 +557,7 @@ var PDF_SCHEDULE = {
   '2026-04': {
     closed: [8, 9, 15, 22, 23],
     hours: '10:00 ~ 17:00',
+    dayHours: { 25: '10:00 ~ 20:00' },
     pdfs: {
       1:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/fb384e6620192d8b8e2cf60a7c93c7f5.pdf',
       2:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/b85fe898e4f855158d07c050964dfc6f.pdf',
@@ -564,22 +565,31 @@ var PDF_SCHEDULE = {
       4:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/4120a98999ed1d908d9cc5492df20b91.pdf',
       5:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/3f57bc313b9792f1c31031cc25bef049.pdf',
       6:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/5df775d56248a748f39d69f78e89673d.pdf',
-      7:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/1326b848b7844ff5c860f7c5b7818e75.pdf',
-      10: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/2c4afffeba5e30a26cfde66c5cfc34e7.pdf',
-      11: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/9cf825fe20e7c8edb50b4e034ebea246.pdf',
-      12: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/8ed683462ad4ac011ee6c71e1f850fcc.pdf',
+      7:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/c4bc62ac26d5dc50787268ff3a75c76b.pdf',
+      10: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/e077959c7b833dd4c9bca83778d454b4.pdf',
+      11: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/2328002087e7c766b9966ad01ab49578.pdf',
+      12: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/34eeb8a9d51cfe486684e8f415bfe8d4.pdf',
       13: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/8afb752f2e1115fa8768d5cf5d507d60.pdf',
       14: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/13bcc3a23dcf5e95d31b7d4826f79d9d.pdf',
       16: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/16ee3ae7a50a5c60f63759d91550e619.pdf',
       17: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/2abece0e0a3c869b99cbf9a599dfb6b2.pdf',
       18: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/024696bd3bffcce9146176c1f94ca853.pdf',
       19: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/15bf9b102a6ce00b1a95397a3e0a9a05.pdf',
-      20: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/d681b9dc749e9590f28ccd430eec11a0.pdf',
-      21: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/0d5019909cda0247956a587cab6cc71e.pdf',
+      20: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/b1d36882dee9947a02a8bb1a3809969a.pdf',
+      21: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/af3028b3592c65c55029f3c6b9f242d8.pdf',
       24: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/c99dae1931bfa58c870bbcd117931b37.pdf',
       25: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/64570970d62529670e24c8ae18eddc69.pdf',
-      26: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/c0d6523d172d3f6836251b982b360755.pdf'
+      26: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/03/c0d6523d172d3f6836251b982b360755.pdf',
+      27: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/feda122617e6786bff82819bceb3322a.pdf',
+      28: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/ba32e520b43866bb13af2a87b334385e.pdf',
+      29: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/e2adb711ba85384c6e920efbc372af73.pdf',
+      30: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/bd252c2d8b37f596c77b71f842af8d54.pdf'
     }
+  },
+  '2026-05': {
+    closed: [7, 13, 14, 20, 21, 27, 28],
+    hours: '10:00 ~ 17:00',
+    pdfs: {}
   }
 };
 
@@ -701,7 +711,9 @@ function isClosed(d) {
 }
 function getHours(d) {
   var m = PDF_SCHEDULE[getMonthKey(d)];
-  return m ? (m.hours || null) : null;
+  if (!m) return null;
+  if (m.dayHours && m.dayHours[d.getDate()]) return m.dayHours[d.getDate()];
+  return m.hours || null;
 }
 
 // ══════════════════════════════════════════════════
@@ -1049,34 +1061,6 @@ function switchMainTab(tabName) {
 // ══════════════════════════════════════════════════
 var FS_CHAR_BASE = 'https://www.harmonyland.jp/sp/funstudio/images/';
 var FS_DATA = {
-  '0315':{'101':'mmkuwi','102':'cnpnkr'},
-  '0316':{'101':'mmkuwi','102':'cnpnkr'},
-  '0317':{'101':'mmkuus','102':'cnpntx'},
-  '0318':{'101':'mmkuus','102':'cnpntx'},
-  '0320':{'101':'mmkuus','102':'cnpntx'},
-  '0321':{'101':'mmkubo02','102':'cnpnxo'},
-  '0322':{'101':'mmkubo02','102':'cnpnxo'},
-  '0323':{'101':'mmkubo02','102':'cnpnxo'},
-  '0324':{'101':'mmkujl','102':'cnpnmf'},
-  '0325':{'101':'mmkujl','102':'cnpnmf'},
-  '0326':{'101':'mmkujl','102':'cnpnmf'},
-  '0327':{'101':'mmkujl','102':'cnpnmf'},
-  '0328':{'101':'mmkump02','102':'cnpnck'},
-  '0329':{'101':'mmkump02','102':'cnpnck'},
-  '0330':{'101':'mmkump02','102':'cnpnck'},
-  '0331':{'101':'mmkump02','102':'cnpnck'},
-  '0401':{'101':'mmkuap','102':'cnpnxo'},
-  '0402':{'101':'mmkuap','102':'cnpnxo'},
-  '0403':{'101':'mmkuap','102':'cnpnxo'},
-  '0404':{'101':'mmkuap','102':'cnpnxo'},
-  '0405':{'101':'mmkutx','102':'cnpnxo'},
-  '0406':{'101':'mmkutx','102':'cnpnxo'},
-  '0407':{'101':'mmkutx','102':'cnpnxo'},
-  '0410':{'101':'mmkumocha','102':'cnpnchiffon'},
-  '0411':{'101':'mmkumocha','102':'cnpnchiffon'},
-  '0412':{'101':'mmkumocha','102':'cnpnchiffon'},
-  '0413':{'101':'mmkumimi','102':'cnpndn'},
-  '0414':{'101':'mmkumimi','102':'cnpndn'},
   '0416':{'101':'mmkumimi','102':'cnpndn'},
   '0417':{'101':'mmkumimi','102':'cnpndn'},
   '0418':{'101':'mmkuus','102':'cnpnck'},
@@ -1089,7 +1073,31 @@ var FS_DATA = {
   '0427':{'101':'mmkump02','102':'cnpnmf'},
   '0428':{'101':'mmkump02','102':'cnpnmf'},
   '0429':{'101':'mmku','102':'cnpn','103':'mpmfbo'},
-  '0430':{'101':'mmkump02','102':'cnpnmf'}
+  '0430':{'101':'mmkump02','102':'cnpnmf'},
+  '0501':{'101':'mmkumimi','102':'cnpndn'},
+  '0502':{'101':'mmku','102':'cnpn','103':'wimimidn'},
+  '0503':{'101':'mmku','102':'cnpn','103':'wimimidn'},
+  '0504':{'101':'mmku','102':'cnpn','103':'wimimidn'},
+  '0505':{'101':'mmku','102':'cnpn','103':'wimimidn'},
+  '0506':{'101':'mmkumf','102':'cnpndn'},
+  '0508':{'101':'mmkumf','102':'cnpndn'},
+  '0509':{'101':'mmkumf','102':'cnpndn'},
+  '0510':{'101':'mmkumf','102':'cnpndn'},
+  '0511':{'101':'mmkuap','102':'cnpntx'},
+  '0512':{'101':'mmkuap','102':'cnpntx'},
+  '0515':{'101':'mmkuap','102':'cnpntx'},
+  '0516':{'101':'mmku','102':'cnpn','103':'apxotx'},
+  '0517':{'101':'mmkuap','102':'cnpntx'},
+  '0518':{'101':'mmkumilk','102':'cnpnes02'},
+  '0519':{'101':'mmkumilk','102':'cnpnes02'},
+  '0522':{'101':'mmkusi','102':'cnpnus02'},
+  '0523':{'101':'mmkusi','102':'cnpnus02'},
+  '0524':{'101':'mmkusi','102':'cnpnus02'},
+  '0525':{'101':'mmkusi','102':'cnpnus02'},
+  '0526':{'101':'mmkusi','102':'cnpnus02'},
+  '0529':{'101':'mmkuma','102':'cnpnjl'},
+  '0530':{'101':'mmkuma','102':'cnpnjl'},
+  '0531':{'101':'mmkuma','102':'cnpnjl'}
 };
 
 var studioListRendered = false;
@@ -1099,10 +1107,10 @@ function renderStudioList() {
   var container = document.getElementById('fs-list');
   var html = '';
   var months = [
-    { m: 3, label: '3月', startDay: 15, endDay: 31 },
-    { m: 4, label: '4月', startDay: 1, endDay: 30 }
+    { m: 4, label: '4月', startDay: 16, endDay: 30 },
+    { m: 5, label: '5月', startDay: 1, endDay: 31 }
   ];
-  var closedDays = { 3: [5,11,12,19], 4: [8,9,15,22,23] };
+  var closedDays = { 4: [22,23], 5: [7,13,14,20,21,27,28] };
 
   months.forEach(function(mo) {
     html += '<div class="fs-row fs-month-header">' + mo.label + '</div>';
@@ -1162,7 +1170,7 @@ var CAST_DATA = [
   { m:4, d:4,  w:6, o:'モップ・マイスウィートピアノ', b:'シフォン', h:'ウィッシュミーメル・ルビー・しろうさ・くろうさ' },
   { m:4, d:5,  w:0, o:'キキ・ララ', b:'マイメロディ', h:'ウィッシュミーメル・ルビー・しろうさ・くろうさ' },
   { m:4, d:6,  w:1, o:'キキ・ララ', b:'マイメロディ', h:'ウィッシュミーメル・ルビー・しろうさ・くろうさ' },
-  { m:4, d:7,  w:2, o:'キキ・ララ', b:'マイスウィートピアノ', h:'ハローキティ・ハローミミィ・マロンクリーム・ウィッシュミーメル' },
+  { m:4, d:7,  w:2, o:'キキ・ララ', b:'-', h:'ハローキティ・ハローミミィ・マロンクリーム・ウィッシュミーメル' },
   { m:4, d:10, w:5, o:'あひるのペックル・けろけろけろっぴ', b:'マイスウィートピアノ', h:'ハローキティ・ハローミミィ・マロンクリーム・ウィッシュミーメル' },
   { m:4, d:11, w:6, o:'あひるのペックル・けろけろけろっぴ', b:'-', h:'-' },
   { m:4, d:12, w:0, o:'あひるのペックル・けろけろけろっぴ', b:'ウィッシュミーメル', h:'ウィッシュミーメル・モップ・マイスウィートピアノ・あひるのペックル' },
@@ -1173,7 +1181,14 @@ var CAST_DATA = [
   { m:4, d:18, w:6, o:'ポムポムプリン・モップ', b:'モカ', h:'ポムポムプリン・バッドばつ丸・シナモロール' },
   { m:4, d:19, w:0, o:'ポムポムプリン・モップ', b:'モカ', h:'ポムポムプリン・バッドばつ丸・シナモロール' },
   { m:4, d:20, w:1, o:'ルビー・ぼんぼんりぼん', b:'マイメロディ', h:'ハローキティ・ハローミミィ・けろけろけろっぴ・タキシードサム' },
-  { m:4, d:21, w:2, o:'ルビー・ぼんぼんりぼん', b:'マイメロディ', h:'ハローキティ・ハローミミィ・けろけろけろっぴ・タキシードサム' }
+  { m:4, d:21, w:2, o:'ルビー・ぼんぼんりぼん', b:'マイメロディ', h:'ハローキティ・ハローミミィ・けろけろけろっぴ・タキシードサム' },
+  { m:4, d:24, w:5, o:'ハローキティ・ハローミミィ', b:'-', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:4, d:25, w:6, o:'ハローキティ・ハローミミィ', b:'-', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:4, d:26, w:0, o:'-', b:'-', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:4, d:27, w:1, o:'マイメロディ・マロンクリーム', b:'ぼんぼんりぼん', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:4, d:28, w:2, o:'マイメロディ・マロンクリーム', b:'ぼんぼんりぼん', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:4, d:29, w:3, o:'ハローキティ・ディアダニエル', b:'クロミ', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:4, d:30, w:4, o:'ハローキティ・ディアダニエル', b:'クロミ', h:'ハローキティ・マイメロディ・キキ・ララ' }
 ];
 
 function renderCastTable() {
