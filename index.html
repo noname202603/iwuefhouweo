@@ -589,7 +589,33 @@ var PDF_SCHEDULE = {
   '2026-05': {
     closed: [7, 13, 14, 20, 21, 27, 28],
     hours: '10:00 ~ 17:00',
-    pdfs: {}
+    dayHours: { 2: '09:00 ~ 20:00', 3: '09:00 ~ 20:00', 4: '09:00 ~ 20:00', 5: '09:00 ~ 20:00', 16: '09:00 ~ 17:00' },
+    pdfs: {
+      1:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/cbf3e49f1f0b14737edd0dcbb35126fa.pdf',
+      2:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/03e158475f5a48e86b8d77b904d69952.pdf',
+      3:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/c1ced9b2722309bd7d67f9d0e1b31529.pdf',
+      4:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/5174602248635ac5162279623e7c285f.pdf',
+      5:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/77a6b38d323f1ffa210d06d58ec85051.pdf',
+      6:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/cce5110414c4df0e001b9f0bef9e46bb.pdf',
+      8:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/83e8b2bfde8d7bffd8c2a8c6a86e13bc.pdf',
+      9:  'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/21da13dc9c351ba5741eb981625e3150.pdf',
+      10: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/dcc0801e6bd1c47b4db7671bcc011cbc.pdf',
+      11: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/0278d2eb6370ddac1e2b6450c7a59f4b.pdf',
+      12: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/9204c00486ce30a95ed3852cf7108bd6.pdf',
+      15: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/64e79ca8b8d136b349b551cae632677b.pdf',
+      16: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/e133b4f734c71e7e2e277c9d5a02a766.pdf',
+      17: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/e2e6e40eaaa7d6de5651df945fcc25c3.pdf',
+      18: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/52b36318d6e166fb6b2063621b53ca20.pdf',
+      19: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/95b4a5129a5829a6d6daca184d2b0c70.pdf',
+      22: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/65fc5aa6ab26f7ca32c7c5462d436ba1.pdf',
+      23: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/fc4f23a8ef58db8d3e0e3a56a85ab49d.pdf',
+      24: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/ce7d654b0fa5f63ef5b0acb607b19ddb.pdf',
+      25: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/4ab563379d52d5212df3a204b162c9e1.pdf',
+      26: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/5daffdad91b7c372aafedd758c7c19e6.pdf',
+      29: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/adb386ef69ca374c0d1d53c61da043f3.pdf',
+      30: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/63557dce4f4954e0e3c5923e16756b54.pdf',
+      31: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/04/669895c37b2f0cf5ea24db506a9fb9ce.pdf'
+    }
   }
 };
 
@@ -1188,7 +1214,31 @@ var CAST_DATA = [
   { m:4, d:27, w:1, o:'マイメロディ・マロンクリーム', b:'ぼんぼんりぼん', h:'ハローキティ・マイメロディ・キキ・ララ' },
   { m:4, d:28, w:2, o:'マイメロディ・マロンクリーム', b:'ぼんぼんりぼん', h:'ハローキティ・マイメロディ・キキ・ララ' },
   { m:4, d:29, w:3, o:'ハローキティ・ディアダニエル', b:'クロミ', h:'ハローキティ・マイメロディ・キキ・ララ' },
-  { m:4, d:30, w:4, o:'ハローキティ・ディアダニエル', b:'クロミ', h:'ハローキティ・マイメロディ・キキ・ララ' }
+  { m:4, d:30, w:4, o:'ハローキティ・ディアダニエル', b:'クロミ', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:5, d:1,  w:5, o:'マイスウィートピアノ・いちごの王さま', b:'モカ', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:5, d:2,  w:6, o:'マイスウィートピアノ・いちごの王さま', b:'ポムポムプリン・バッドばつ丸', h:'-' },
+  { m:5, d:3,  w:0, o:'シナモロール・おさるのもんきち', b:'ポムポムプリン・バッドばつ丸', h:'-' },
+  { m:5, d:4,  w:1, o:'シナモロール・おさるのもんきち', b:'ポムポムプリン・バッドばつ丸', h:'-' },
+  { m:5, d:5,  w:2, o:'ぽんぽこぽこぽん・タキシードサム', b:'ポムポムプリン・バッドばつ丸', h:'-' },
+  { m:5, d:6,  w:3, o:'ぽんぽこぽこぽん・タキシードサム', b:'モカ', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:5, d:8,  w:5, o:'コロコロクリリン・ぐでたま', b:'マイスウィートピアノ', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:5, d:9,  w:6, o:'コロコロクリリン・ぐでたま', b:'マイスウィートピアノ', h:'ハローキティ・マイメロディ・キキ・ララ' },
+  { m:5, d:10, w:0, o:'バッドばつ丸・ハンギョドン', b:'シフォン', h:'ハローキティ・バッドばつ丸・クロミ・ぽんぽこぽこぽん' },
+  { m:5, d:11, w:1, o:'バッドばつ丸・ハンギョドン', b:'シフォン', h:'ハローキティ・バッドばつ丸・クロミ・ぽんぽこぽこぽん' },
+  { m:5, d:12, w:2, o:'バッドばつ丸・ハンギョドン', b:'コロコロクリリン', h:'ハローキティ・ウサハナ・コロコロクリリン・おさるのもんきち' },
+  { m:5, d:15, w:5, o:'ウサハナ・クロミ', b:'コロコロクリリン', h:'ハローキティ・ウサハナ・コロコロクリリン・おさるのもんきち' },
+  { m:5, d:16, w:6, o:'ウサハナ・クロミ', b:'ウィッシュミーメル', h:'ハローキティ・ハローミミィ・メアリー・ジョージ' },
+  { m:5, d:17, w:0, o:'ウサハナ・クロミ', b:'ウィッシュミーメル', h:'ハローキティ・ハローミミィ・メアリー・ジョージ' },
+  { m:5, d:18, w:1, o:'しろうさ・くろうさ', b:'ぼんぼんりぼん', h:'ハローキティ・ハローミミィ・キキ・ララ' },
+  { m:5, d:19, w:2, o:'しろうさ・くろうさ', b:'ぼんぼんりぼん', h:'ハローキティ・ハローミミィ・キキ・ララ' },
+  { m:5, d:22, w:5, o:'ウィッシュミーメル・ポチャッコ', b:'クロミ', h:'ハローキティ・ディアダニエル・バッドばつ丸・コロコロクリリン' },
+  { m:5, d:23, w:6, o:'ウィッシュミーメル・ポチャッコ', b:'クロミ', h:'ハローキティ・ディアダニエル・バッドばつ丸・コロコロクリリン' },
+  { m:5, d:24, w:0, o:'キキ・ララ', b:'ウサハナ', h:'ハローキティ・ぼんぼんりぼん・ウィッシュミーメル・ウサハナ' },
+  { m:5, d:25, w:1, o:'キキ・ララ', b:'ウサハナ', h:'ハローキティ・ぼんぼんりぼん・ウィッシュミーメル・ウサハナ' },
+  { m:5, d:26, w:2, o:'キキ・ララ', b:'モカ', h:'ハローキティ・ぼんぼんりぼん・ウィッシュミーメル・ウサハナ' },
+  { m:5, d:29, w:5, o:'ルビー・ウサハナ', b:'モカ', h:'ハローキティ・ハローミミィ・ポムポムプリン・あひるのペックル' },
+  { m:5, d:30, w:6, o:'ルビー・ウサハナ', b:'マイメロディ', h:'ハローキティ・ハローミミィ・ポムポムプリン・あひるのペックル' },
+  { m:5, d:31, w:0, o:'ルビー・ウサハナ', b:'マイメロディ', h:'ハローキティ・ハローミミィ・ポムポムプリン・あひるのペックル' }
 ];
 
 function renderCastTable() {
