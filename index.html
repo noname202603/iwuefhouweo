@@ -274,7 +274,7 @@
   }
   .main-tab:first-child { border-radius: 12px 0 0 12px; }
   .main-tab:last-child { border-radius: 0 12px 12px 0; }
-  .main-tab:nth-child(2) { border-left: none; border-right: none; }
+  .main-tab:not(:first-child) { border-left: none; }
   .main-tab.active {
     background: linear-gradient(135deg, var(--pink), var(--lavender));
     color: white; border-color: var(--pink);
@@ -350,12 +350,63 @@
   .fs-s103 { background: var(--mint); }
   .fs-char-img { width: 80px; height: 28px; object-fit: contain; border-radius: 4px; }
 
+  /* ── 有料グリーティング ── */
+  .pg-card {
+    background: white; border-radius: 20px; padding: 18px 20px;
+    margin-bottom: 16px; border: 1.5px solid rgba(249,123,189,0.2);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .pg-card.pg-ended { opacity: 0.55; }
+  .pg-card-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 8px; margin-bottom: 8px; flex-wrap: wrap;
+  }
+  .pg-name { font-size: 15px; font-weight: 900; flex: 1; line-height: 1.4; }
+  .pg-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .pg-status-badge {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px;
+  }
+  .pg-status-badge.ended { background: #eee; color: #999; }
+  .pg-status-badge.active {
+    background: linear-gradient(135deg, var(--pink), var(--lavender)); color: white;
+  }
+  .pg-official-link {
+    font-size: 12px; color: var(--pink2); text-decoration: none; font-weight: 700;
+  }
+  .pg-official-link:hover { text-decoration: underline; }
+  .pg-period { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .pg-times { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .pg-meta { font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .pg-note { font-size: 11px; color: var(--muted); margin-bottom: 6px; font-style: italic; }
+  /* テーブル */
+  .pg-table-wrap { overflow-x: auto; margin-top: 10px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.07); }
+  .pg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .pg-table thead th {
+    background: linear-gradient(135deg, rgba(249,123,189,0.13), rgba(200,180,232,0.1));
+    padding: 7px 10px; font-weight: 900; font-size: 11px; letter-spacing: 0.05em;
+    text-align: left; white-space: nowrap; color: var(--muted);
+  }
+  .pg-table tbody td {
+    padding: 6px 10px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    vertical-align: middle; line-height: 1.5;
+  }
+  .pg-table tbody tr:last-child td { border-bottom: none; }
+  .pg-month-row td {
+    background: linear-gradient(135deg, rgba(249,123,189,0.09), rgba(200,180,232,0.07));
+    font-weight: 900; font-size: 13px; padding: 5px 10px; color: var(--text);
+  }
+  .pg-date-col { font-weight: 700; white-space: nowrap; min-width: 72px; }
+  .pg-date-col.sun { color: #F97BBD; }
+  .pg-date-col.sat { color: #87CEEA; }
+  .pg-table tbody tr.today-row { background: rgba(255,229,102,0.28); }
+  .pg-none { color: var(--muted); }
+
   @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
   @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   @media (max-width: 600px) {
-    .main-tab { font-size: 12px; padding: 8px 16px; }
+    .main-tab { font-size: 11px; padding: 8px 10px; }
     .cast-table { font-size: 11px; min-width: 500px; }
     .cast-table thead th { padding: 8px 8px; }
     .cast-table tbody td { padding: 6px 8px; }
@@ -425,6 +476,7 @@
     <button class="main-tab active" onclick="switchMainTab('schedule')">&#x1F4C5; スケジュール</button>
     <button class="main-tab" onclick="switchMainTab('cast')">&#x1F3AD; 出演キャラ</button>
     <button class="main-tab" onclick="switchMainTab('studio')">&#x1F3E0; ファンスタジオ</button>
+    <button class="main-tab" onclick="switchMainTab('paid')">&#x1F4B3; 有料グリ</button>
   </div>
 
   <!-- タブ1: 今日のスケジュール -->
@@ -490,8 +542,8 @@
           <tr>
             <th>日付</th>
             <th>おでむかえ</th>
-            <th>ビンゴ</th>
-            <th>ハイタッチ</th>
+            <th>Iceful Bingo</th>
+            <th>はちゃめちゃ</th>
           </tr>
         </thead>
         <tbody id="cast-tbody"></tbody>
@@ -501,13 +553,22 @@
 
   <!-- タブ3: ファンスタジオ一覧 -->
   <div class="tab-content" id="tab-studio">
-    <div class="section-title" style="margin-bottom:8px">3月〜4月 キャラクタースケジュール</div>
+    <div class="section-title" style="margin-bottom:8px">5月〜6月 キャラクタースケジュール</div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:16px;text-align:center;">
       各日のスタジオ101号室・102号室に登場するキャラクター<br>
       <a href="https://www.harmonyland.jp/sp/funstudio/c_schedule.html" target="_blank" style="color:var(--pink2);">公式ファンスタジオページ</a>
     </p>
     <div class="fs-list" id="fs-list"></div>
   </div><!-- /tab-studio -->
+
+  <!-- タブ4: 有料グリーティング -->
+  <div class="tab-content" id="tab-paid">
+    <div class="section-title" style="margin-bottom:8px">&#x1F4B3; 有料キャラクターグリーティング</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;text-align:center;">
+      各グリーティングの詳細・抽選方法は公式サイトをご確認ください
+    </p>
+    <div id="pg-list"></div>
+  </div><!-- /tab-paid -->
 
   <footer>
     <p>データ出典: <a href="https://www.harmonyland.jp/" target="_blank">ハーモニーランド 公式サイト</a></p>
@@ -644,6 +705,22 @@ var PDF_SCHEDULE = {
       29: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/05/befb71e12a4ad5779486ef29f4dbf6e2.pdf',
       30: 'https://www.harmonyland.jp/wp/wp-content/uploads/2026/05/34c8fa00a98ecc2762bff8953126d50c.pdf'
     }
+  },
+  '2026-07': {
+    closed: [1, 2, 8, 9, 15, 16],
+    hours: '10:00 ~ 17:00',
+    pdfs: {}
+  },
+  '2026-08': {
+    closed: [],
+    hours: '10:00 ~ 17:00',
+    dayHours: { 13: '10:00 ~ 20:00', 14: '10:00 ~ 20:00', 15: '10:00 ~ 20:00' },
+    pdfs: {}
+  },
+  '2026-09': {
+    closed: [2, 3, 9, 10, 16, 17],
+    hours: '10:00 ~ 17:00',
+    pdfs: {}
   }
 };
 
@@ -1098,7 +1175,7 @@ function render() {
 //  メインタブ切り替え
 // ══════════════════════════════════════════════════
 function switchMainTab(tabName) {
-  var tabs = ['schedule', 'cast', 'studio'];
+  var tabs = ['schedule', 'cast', 'studio', 'paid'];
   document.querySelectorAll('.main-tab').forEach(function(btn, i) {
     btn.classList.toggle('active', tabName === tabs[i]);
   });
@@ -1108,6 +1185,7 @@ function switchMainTab(tabName) {
   });
   if (tabName === 'cast') renderCastTable();
   if (tabName === 'studio') renderStudioList();
+  if (tabName === 'paid') renderPaidGreet();
 }
 
 // ══════════════════════════════════════════════════
@@ -1115,30 +1193,6 @@ function switchMainTab(tabName) {
 // ══════════════════════════════════════════════════
 var FS_CHAR_BASE = 'https://www.harmonyland.jp/sp/funstudio/images/';
 var FS_DATA = {
-  '0416':{'101':'mmkumimi','102':'cnpndn'},
-  '0417':{'101':'mmkumimi','102':'cnpndn'},
-  '0418':{'101':'mmkuus','102':'cnpnck'},
-  '0419':{'101':'mmkuus','102':'cnpnck'},
-  '0420':{'101':'mmkuus','102':'cnpnck'},
-  '0421':{'101':'mmkuus','102':'cnpnck'},
-  '0424':{'101':'mmku','102':'cnpn','103':'esjlmilk'},
-  '0425':{'101':'mmku','102':'cnpn','103':'esjlmilk'},
-  '0426':{'101':'mmku','102':'cnpn','103':'esjlmilk'},
-  '0427':{'101':'mmkump02','102':'cnpnmf'},
-  '0428':{'101':'mmkump02','102':'cnpnmf'},
-  '0429':{'101':'mmku','102':'cnpn','103':'mpmfbo'},
-  '0430':{'101':'mmkump02','102':'cnpnmf'},
-  '0501':{'101':'mmkumimi','102':'cnpndn'},
-  '0502':{'101':'mmku','102':'cnpn','103':'wimimidn'},
-  '0503':{'101':'mmku','102':'cnpn','103':'wimimidn'},
-  '0504':{'101':'mmku','102':'cnpn','103':'wimimidn'},
-  '0505':{'101':'mmku','102':'cnpn','103':'wimimidn'},
-  '0506':{'101':'mmkumf','102':'cnpndn'},
-  '0508':{'101':'mmkumf','102':'cnpndn'},
-  '0509':{'101':'mmkumf','102':'cnpndn'},
-  '0510':{'101':'mmkumf','102':'cnpndn'},
-  '0511':{'101':'mmkuap','102':'cnpntx'},
-  '0512':{'101':'mmkuap','102':'cnpntx'},
   '0515':{'101':'mmkuap','102':'cnpntx'},
   '0516':{'101':'mmku','102':'cnpn','103':'apxotx'},
   '0517':{'101':'mmkuap','102':'cnpntx'},
@@ -1151,7 +1205,29 @@ var FS_DATA = {
   '0526':{'101':'mmkusi','102':'cnpnus02'},
   '0529':{'101':'mmkuma','102':'cnpnjl'},
   '0530':{'101':'mmkuma','102':'cnpnjl'},
-  '0531':{'101':'mmkuma','102':'cnpnjl'}
+  '0531':{'101':'mmkuma','102':'cnpnjl'},
+  '0601':{'101':'mmkuma','102':'cnpnhg02'},
+  '0602':{'101':'mmkuma','102':'cnpnpapa'},
+  '0605':{'101':'mmkudn','102':'cnpnhg02'},
+  '0606':{'101':'mmkudn','102':'cnpnhg02'},
+  '0607':{'101':'mmkudn','102':'cnpnhg02'},
+  '0608':{'101':'mmkumilk','102':'cnpnkr','103':'cnpnkr'},
+  '0609':{'101':'mmkumilk','102':'cnpnkr','103':'cnpnkr'},
+  '0612':{'101':'mmkumilk','102':'cnpnkr','103':'cnpnkr'},
+  '0613':{'101':'mmkump02','102':'cnpnap02'},
+  '0614':{'101':'mmkump02','102':'cnpnap02'},
+  '0615':{'101':'mmkump02','102':'cnpnap02','103':'cnpnap02'},
+  '0616':{'101':'mmkumf','102':'cnpnxo','103':'cnpnxo'},
+  '0619':{'101':'mmkumf','102':'cnpnxo','103':'cnpnxo'},
+  '0620':{'101':'mmkumf','102':'cnpnxo'},
+  '0621':{'101':'mmkubo02','102':'cnpnjl'},
+  '0622':{'101':'mmkubo02','102':'cnpnjl'},
+  '0623':{'101':'mmkubo02','102':'cnpnjl'},
+  '0626':{'101':'mmkucap','102':'cnpnmocha'},
+  '0627':{'101':'mmkucap','102':'cnpnmocha'},
+  '0628':{'101':'mmkucap','102':'cnpnmocha'},
+  '0629':{'101':'mmkucap','102':'cnpnmocha'},
+  '0630':{'101':'mmkucap','102':'cnpnmocha'}
 };
 
 var studioListRendered = false;
@@ -1161,10 +1237,10 @@ function renderStudioList() {
   var container = document.getElementById('fs-list');
   var html = '';
   var months = [
-    { m: 4, label: '4月', startDay: 16, endDay: 30 },
-    { m: 5, label: '5月', startDay: 1, endDay: 31 }
+    { m: 5, label: '5月', startDay: 15, endDay: 31 },
+    { m: 6, label: '6月', startDay: 1, endDay: 30 }
   ];
-  var closedDays = { 4: [22,23], 5: [7,13,14,20,21,27,28] };
+  var closedDays = { 5: [7,13,14,20,21,27,28], 6: [3,4,10,11,17,18,24,25] };
 
   months.forEach(function(mo) {
     html += '<div class="fs-row fs-month-header">' + mo.label + '</div>';
@@ -1288,7 +1364,77 @@ var CAST_DATA = [
   { m:6, d:27, w:6, o:'シナモロール・ポムポムプリン', b:'マイスウィートピアノ', h:'ハローキティ・ハローミミィ・ウサハナ・コロコロクリリン' },
   { m:6, d:28, w:0, o:'シナモロール・ポムポムプリン', b:'ウィッシュミーメル', h:'ハローキティ・ハローミミィ・ウサハナ・コロコロクリリン' },
   { m:6, d:29, w:1, o:'みるく・シフォン', b:'ウィッシュミーメル', h:'ハローキティ・ディアダニエル・マイメロディ・バッドばつ丸' },
-  { m:6, d:30, w:2, o:'みるく・シフォン', b:'ウィッシュミーメル', h:'ハローキティ・ディアダニエル・マイメロディ・バッドばつ丸' }
+  { m:6, d:30, w:2, o:'みるく・シフォン', b:'ウィッシュミーメル', h:'ハローキティ・ディアダニエル・マイメロディ・バッドばつ丸' },
+  // ── 7月 夏パーティ ──
+  { m:7, d:3,  w:5, o:'ぼんぼんりぼん・モップ', b:'あひるのペックル', h:'バッドばつ丸・あひるのペックル・タキシードサム' },
+  { m:7, d:4,  w:6, o:'ぼんぼんりぼん・モップ', b:'あひるのペックル', h:'バッドばつ丸・あひるのペックル・タキシードサム' },
+  { m:7, d:5,  w:0, o:'コロコロクリリン・シフォン', b:'あひるのペックル', h:'バッドばつ丸・あひるのペックル・タキシードサム' },
+  { m:7, d:6,  w:1, o:'コロコロクリリン・シフォン', b:'あひるのペックル', h:'ハローキティ・ハローミミィ・ディアダニエル' },
+  { m:7, d:7,  w:2, o:'コロコロクリリン・シフォン', b:'あひるのペックル', h:'ハローキティ・ハローミミィ・ディアダニエル' },
+  { m:7, d:10, w:5, o:'バッドばつ丸・おさるのもんきち', b:'ポムポムプリン', h:'ハローキティ・ハローミミィ・ディアダニエル' },
+  { m:7, d:11, w:6, o:'バッドばつ丸・おさるのもんきち', b:'ポムポムプリン', h:'シナモロール・モカ・みるく' },
+  { m:7, d:12, w:0, o:'しろうさ・くろうさ', b:'ポムポムプリン', h:'シナモロール・モカ・みるく' },
+  { m:7, d:13, w:1, o:'しろうさ・くろうさ', b:'ポムポムプリン', h:'シナモロール・モカ・みるく' },
+  { m:7, d:14, w:2, o:'しろうさ・くろうさ', b:'ポムポムプリン', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:7, d:17, w:5, o:'モカ・みるく', b:'ディアダニエル', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:7, d:18, w:6, o:'モカ・みるく', b:'ディアダニエル', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:7, d:19, w:0, o:'ハローキティ・ハローミミィ', b:'ディアダニエル', h:'ウサハナ・コロコロクリリン・しろうさ・くろうさ' },
+  { m:7, d:20, w:1, o:'ハローキティ・ハローミミィ', b:'ディアダニエル', h:'ウサハナ・コロコロクリリン・しろうさ・くろうさ' },
+  { m:7, d:21, w:2, o:'ハローキティ・ハローミミィ', b:'ディアダニエル', h:'ウサハナ・コロコロクリリン・しろうさ・くろうさ' },
+  { m:7, d:22, w:3, o:'ウィッシュミーメル・ウサハナ', b:'ディアダニエル', h:'ハローキティ・ハローミミィ・メアリー（ママ）・ジョージ（パパ）' },
+  { m:7, d:23, w:4, o:'ウィッシュミーメル・ウサハナ', b:'シナモロール', h:'ハローキティ・ハローミミィ・メアリー（ママ）・ジョージ（パパ）' },
+  { m:7, d:24, w:5, o:'シナモロール・エスプレッソ', b:'シナモロール', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:25, w:6, o:'シナモロール・エスプレッソ', b:'シナモロール', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:26, w:0, o:'キキ・ララ', b:'シナモロール', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:27, w:1, o:'キキ・ララ', b:'シナモロール', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:28, w:2, o:'キキ・ララ', b:'シナモロール', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:29, w:3, o:'マイスウィートピアノ・ルビー', b:'クロミ', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:30, w:4, o:'マイスウィートピアノ・ルビー', b:'クロミ', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  { m:7, d:31, w:5, o:'マイスウィートピアノ・ルビー', b:'クロミ', h:'ハローキティ・ポムポムプリン・ポチャッコ' },
+  // ── 8月 夏パーティ ──
+  { m:8, d:1,  w:6, o:'バッドばつ丸・ハンギョドン', b:'クロミ', h:'ポチャッコ・ハンギョドン・けろけろけろっぴ' },
+  { m:8, d:2,  w:0, o:'バッドばつ丸・ハンギョドン', b:'クロミ', h:'ポチャッコ・ハンギョドン・けろけろけろっぴ' },
+  { m:8, d:3,  w:1, o:'バッドばつ丸・ハンギョドン', b:'クロミ', h:'ポチャッコ・ハンギョドン・けろけろけろっぴ' },
+  { m:8, d:4,  w:2, o:'シフォン・みるく', b:'クロミ', h:'モカ・カプチーノ・エスプレッソ' },
+  { m:8, d:5,  w:3, o:'シフォン・みるく', b:'クロミ', h:'モカ・カプチーノ・エスプレッソ' },
+  { m:8, d:6,  w:4, o:'シフォン・みるく', b:'ウィッシュミーメル', h:'モカ・カプチーノ・エスプレッソ' },
+  { m:8, d:7,  w:5, o:'マイメロディ・ウィッシュミーメル', b:'ウィッシュミーメル', h:'モカ・カプチーノ・エスプレッソ' },
+  { m:8, d:8,  w:6, o:'マイメロディ・ウィッシュミーメル', b:'ウィッシュミーメル', h:'モカ・シフォン・みるく' },
+  { m:8, d:9,  w:0, o:'タキシードサム・ポチャッコ', b:'ウィッシュミーメル', h:'モカ・シフォン・みるく' },
+  { m:8, d:10, w:1, o:'タキシードサム・ポチャッコ', b:'ウィッシュミーメル', h:'モカ・シフォン・みるく' },
+  { m:8, d:11, w:2, o:'タキシードサム・ポチャッコ', b:'ウィッシュミーメル', h:'モカ・シフォン・みるく' },
+  { m:8, d:12, w:3, o:'キキ・ララ', b:'クロミ', h:'ハローキティ・ディアダニエル・メアリー（ママ）・ジョージ（パパ）' },
+  { m:8, d:13, w:4, o:'キキ・ララ', b:'クロミ', h:'ハローキティ・ディアダニエル・メアリー（ママ）・ジョージ（パパ）' },
+  { m:8, d:14, w:5, o:'キキ・ララ', b:'クロミ', h:'ハローキティ・ディアダニエル・メアリー（ママ）・ジョージ（パパ）' },
+  { m:8, d:15, w:6, o:'ハローキティ・いちごの王さま', b:'クロミ', h:'ハローキティ・ディアダニエル・メアリー（ママ）・ジョージ（パパ）' },
+  { m:8, d:16, w:0, o:'ハローキティ・いちごの王さま', b:'ディアダニエル', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:8, d:17, w:1, o:'マイスウィートピアノ・クロミ', b:'ディアダニエル', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:8, d:18, w:2, o:'マイスウィートピアノ・クロミ', b:'ディアダニエル', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:8, d:19, w:3, o:'マイスウィートピアノ・クロミ', b:'ディアダニエル', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:8, d:20, w:4, o:'しろうさ・くろうさ', b:'ディアダニエル', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:8, d:21, w:5, o:'しろうさ・くろうさ', b:'あひるのペックル', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:8, d:22, w:6, o:'しろうさ・くろうさ', b:'あひるのペックル', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:8, d:23, w:0, o:'モップ・ルビー', b:'あひるのペックル', h:'マイメロディ・クロミ・マイスウィートピアノ' },
+  { m:8, d:24, w:1, o:'モップ・ルビー', b:'あひるのペックル', h:'カプチーノ・エスプレッソ・みるく' },
+  { m:8, d:25, w:2, o:'モップ・ルビー', b:'あひるのペックル', h:'カプチーノ・エスプレッソ・みるく' },
+  { m:8, d:26, w:3, o:'ウサハナ・コロコロクリリン', b:'あひるのペックル', h:'カプチーノ・エスプレッソ・みるく' },
+  { m:8, d:27, w:4, o:'ウサハナ・コロコロクリリン', b:'シナモロール', h:'カプチーノ・エスプレッソ・みるく' },
+  { m:8, d:28, w:5, o:'ウサハナ・コロコロクリリン', b:'シナモロール', h:'モカ・シフォン・みるく' },
+  { m:8, d:29, w:6, o:'ハローキティ・ハローミミィ', b:'シナモロール', h:'モカ・シフォン・みるく' },
+  { m:8, d:30, w:0, o:'ハローキティ・ハローミミィ', b:'シナモロール', h:'モカ・シフォン・みるく' },
+  { m:8, d:31, w:1, o:'ハローキティ・ハローミミィ', b:'シナモロール', h:'モカ・シフォン・みるく' },
+  // ── 9月 夏パーティ ──
+  { m:9, d:1,  w:2, o:'ルビー・ぼんぼんりぼん', b:'シナモロール', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:9, d:4,  w:5, o:'ルビー・ぼんぼんりぼん', b:'シナモロール', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:9, d:5,  w:6, o:'ルビー・ぼんぼんりぼん', b:'シナモロール', h:'ぼんぼんりぼん・ウサハナ・ウィッシュミーメル' },
+  { m:9, d:6,  w:0, o:'しろうさ・くろうさ', b:'シナモロール', h:'バッドばつ丸・ポチャッコ・けろけろけろっぴ' },
+  { m:9, d:7,  w:1, o:'しろうさ・くろうさ', b:'クロミ', h:'バッドばつ丸・ポチャッコ・けろけろけろっぴ' },
+  { m:9, d:8,  w:2, o:'しろうさ・くろうさ', b:'クロミ', h:'バッドばつ丸・ポチャッコ・けろけろけろっぴ' },
+  { m:9, d:11, w:5, o:'モップ・ウサハナ', b:'クロミ', h:'バッドばつ丸・ポチャッコ・けろけろけろっぴ' },
+  { m:9, d:12, w:6, o:'モップ・ウサハナ', b:'クロミ', h:'バッドばつ丸・タキシードサム・ハンギョドン' },
+  { m:9, d:13, w:0, o:'キキ・ララ', b:'クロミ', h:'バッドばつ丸・タキシードサム・ハンギョドン' },
+  { m:9, d:14, w:1, o:'キキ・ララ', b:'クロミ', h:'ポチャッコ・タキシードサム・ハンギョドン' },
+  { m:9, d:15, w:2, o:'キキ・ララ', b:'クロミ', h:'ポチャッコ・タキシードサム・ハンギョドン' }
 ];
 
 function renderCastTable() {
@@ -1310,6 +1456,175 @@ function renderCastTable() {
     html += '</tr>';
   });
   tbody.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════
+//  有料グリーティングデータ
+// ══════════════════════════════════════════════════
+var PAID_GREET_DATA = [
+  // ── The Colorful Blooming! ── 公式HTMLソースより（10:30/13:30で別キャラ）
+  {
+    id: 'flower',
+    name: '「The Colorful Blooming!」グリーティング',
+    period: '3月20日〜6月30日',
+    status: 'ended',
+    times: '①10:30〜11:00　②13:30〜14:00',
+    url: 'https://www.harmonyland.jp/sp/character/gree_flower26.html',
+    type: 'bloom',  // 日付 | 10:30キャラ | 13:30キャラ（枠ごとに別）
+    schedule: [
+      { m:6, d:8,  w:1, t10:'クロミ',             t13:'シナモロール' },
+      { m:6, d:9,  w:2, t10:'マイメロディ',        t13:'ディアダニエル' },
+      { m:6, d:12, w:5, t10:'クロミ',             t13:'ハローキティ' },
+      { m:6, d:13, w:6, t10:'マイメロディ',        t13:'シナモロール' },
+      { m:6, d:14, w:0, t10:'ウィッシュミーメル',   t13:'ディアダニエル' },
+      { m:6, d:15, w:1, t10:'クロミ',             t13:'ディアダニエル' },
+      { m:6, d:16, w:2, t10:'マイメロディ',        t13:'ウィッシュミーメル' },
+      { m:6, d:19, w:5, t10:'ハローキティ',        t13:'シナモロール' },
+      { m:6, d:20, w:6, t10:'マイメロディ',        t13:'シナモロール' },
+      { m:6, d:21, w:0, t10:'クロミ',             t13:'ウィッシュミーメル' },
+      { m:6, d:22, w:1, t10:'ディアダニエル',      t13:'ハローキティ' },
+      { m:6, d:23, w:2, t10:'シナモロール',        t13:'ディアダニエル' },
+      { m:6, d:26, w:5, t10:'クロミ',             t13:'ハローキティ' },
+      { m:6, d:27, w:6, t10:'マイメロディ',        t13:'ウィッシュミーメル' },
+      { m:6, d:28, w:0, t10:'ディアダニエル',      t13:'ハローキティ' },
+      { m:6, d:29, w:1, t10:'クロミ',             t13:'ウィッシュミーメル' },
+      { m:6, d:30, w:2, t10:'マイメロディ',        t13:'シナモロール' }
+    ]
+  },
+  // ── はちゃめちゃスペシャルペアグリーティング ── 日ごとにペアが変わる
+  {
+    id: 'hiyake',
+    name: 'はちゃめちゃスペシャルペアグリーティング',
+    period: '7月4日〜7月13日',
+    status: 'active',
+    times: '10:30〜',
+    price: '5,000円',
+    capacity: '各日20組',
+    venue: 'キャラクターグリーティング ファンスタジオ',
+    url: 'https://www.harmonyland.jp/sp/character/gree_hiyake26.html',
+    type: 'simple',
+    schedule: [
+      { m:7, d:4,  w:6, c:'ポムポムプリン・ディアダニエル' },
+      { m:7, d:5,  w:0, c:'ポムポムプリン・ディアダニエル' },
+      { m:7, d:6,  w:1, c:'ポムポムプリン・ディアダニエル' },
+      { m:7, d:7,  w:2, c:'ポムポムプリン・ディアダニエル' },
+      { m:7, d:10, w:5, c:'シナモロール・あひるのペックル' },
+      { m:7, d:11, w:6, c:'シナモロール・あひるのペックル' },
+      { m:7, d:12, w:0, c:'シナモロール・あひるのペックル' },
+      { m:7, d:13, w:1, c:'シナモロール・あひるのペックル' }
+    ]
+  },
+  // ── Iceful Parade ── 1枠1キャラ（公式HTMLソースより正確取得）
+  // icekt26=キティ icemm26=マイメロ iceku26=クロミ icedn26=ダニエル icecn26=シナモン icepn26=プリン
+  {
+    id: 'ice',
+    name: '「Iceful Parade」キャラクターグリーティング',
+    period: '7月4日〜7月31日',
+    status: 'active',
+    url: 'https://www.harmonyland.jp/sp/character/gree_ice26.html',
+    type: 'slots',  // 日付 | 10:30 | 16:00
+    schedule: [
+      { m:7, d:4,  w:6, t10:null,             t16:'ハローキティ' },
+      { m:7, d:5,  w:0, t10:null,             t16:'クロミ' },
+      { m:7, d:6,  w:1, t10:null,             t16:'ポムポムプリン' },
+      { m:7, d:7,  w:2, t10:null,             t16:'クロミ' },
+      { m:7, d:10, w:5, t10:null,             t16:'シナモロール' },
+      { m:7, d:11, w:6, t10:null,             t16:'マイメロディ' },
+      { m:7, d:12, w:0, t10:null,             t16:'クロミ' },
+      { m:7, d:13, w:1, t10:null,             t16:'ポムポムプリン' },
+      { m:7, d:14, w:2, t10:'マイメロディ',   t16:'シナモロール' },
+      { m:7, d:17, w:5, t10:'マイメロディ',   t16:'ディアダニエル' },
+      { m:7, d:20, w:1, t10:'ポムポムプリン', t16:'ディアダニエル' },
+      { m:7, d:21, w:2, t10:'シナモロール',   t16:'ハローキティ' },
+      { m:7, d:22, w:3, t10:'ポムポムプリン', t16:'クロミ' },
+      { m:7, d:23, w:4, t10:'ハローキティ',   t16:'ディアダニエル' },
+      { m:7, d:24, w:5, t10:'クロミ',         t16:'シナモロール' },
+      { m:7, d:25, w:6, t10:'ハローキティ',   t16:'マイメロディ' },
+      { m:7, d:26, w:0, t10:'ディアダニエル', t16:'シナモロール' },
+      { m:7, d:27, w:1, t10:'ハローキティ',   t16:'マイメロディ' },
+      { m:7, d:28, w:2, t10:'マイメロディ',   t16:'ハローキティ' },
+      { m:7, d:29, w:3, t10:'ポムポムプリン', t16:'マイメロディ' },
+      { m:7, d:30, w:4, t10:'ディアダニエル', t16:'ポムポムプリン' },
+      { m:7, d:31, w:5, t10:'シナモロール',   t16:'クロミ' }
+    ]
+  }
+];
+
+var paidGreetRendered = false;
+function renderPaidGreet() {
+  if (paidGreetRendered) return;
+  paidGreetRendered = true;
+  var today = getToday();
+  var container = document.getElementById('pg-list');
+
+  var ICONS  = { flower:'🌸', hiyake:'☀️', ice:'🍦' };
+  var SHORTS = {
+    flower : 'The Colorful Blooming!',
+    hiyake : 'はちゃめちゃスペシャルペアグリ',
+    ice    : 'Iceful Parade'
+  };
+
+  // ── 凡例 ──
+  var html = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">';
+  PAID_GREET_DATA.forEach(function(ev) {
+    var icon = ICONS[ev.id] || '';
+    html += '<a href="' + ev.url + '" target="_blank"'
+      + ' style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;'
+      + 'color:var(--text);text-decoration:none;background:white;'
+      + 'border:1.5px solid rgba(249,123,189,0.25);border-radius:99px;padding:4px 12px;">'
+      + icon + ' ' + (SHORTS[ev.id] || escapeHtml(ev.name))
+      + ' <span style="font-size:10px;color:var(--muted);">&#x2197;</span></a>';
+  });
+  html += '</div>';
+
+  // ── 日付マップ構築（全グリを統合） ──
+  var dateMap = {};
+  PAID_GREET_DATA.forEach(function(ev) {
+    var icon = ICONS[ev.id] || '';
+    ev.schedule.forEach(function(s) {
+      var key = s.m + '-' + s.d;
+      if (!dateMap[key]) dateMap[key] = { m:s.m, d:s.d, w:s.w, t10:null, t13:null, t16:null };
+      if (ev.id === 'flower') {
+        // 10:30 / 13:30 それぞれ別キャラ（公式HTMLより）
+        if (s.t10) dateMap[key].t10 = icon + ' ' + s.t10;
+        if (s.t13) dateMap[key].t13 = icon + ' ' + s.t13;
+      } else if (ev.id === 'hiyake') {
+        // 10:30 のみ
+        dateMap[key].t10 = icon + ' ' + s.c;
+      } else if (ev.id === 'ice') {
+        if (s.t10) dateMap[key].t10 = icon + ' ' + s.t10;
+        if (s.t16) dateMap[key].t16 = icon + ' ' + s.t16;
+      }
+    });
+  });
+
+  // ── 日付順ソート ──
+  var sorted = Object.values(dateMap).sort(function(a, b) {
+    return a.m !== b.m ? a.m - b.m : a.d - b.d;
+  });
+
+  // ── テーブル描画 ──
+  html += '<div class="pg-table-wrap"><table class="pg-table">';
+  html += '<thead><tr><th>日付</th><th>10:30</th><th>13:30</th><th>16:00</th></tr></thead><tbody>';
+
+  var lastM = 0;
+  sorted.forEach(function(row) {
+    if (row.m !== lastM) {
+      html += '<tr class="pg-month-row"><td colspan="4">' + row.m + '月</td></tr>';
+      lastM = row.m;
+    }
+    var dc   = row.w === 0 ? ' sun' : row.w === 6 ? ' sat' : '';
+    var isT  = new Date(2026, row.m-1, row.d).getTime() === today.getTime();
+    html += '<tr' + (isT ? ' class="today-row"' : '') + '>';
+    html += '<td class="pg-date-col' + dc + '">' + row.m + '/' + row.d + '(' + WEEKDAYS[row.w] + ')</td>';
+    html += '<td>' + (row.t10 || '<span class="pg-none">―</span>') + '</td>';
+    html += '<td>' + (row.t13 || '<span class="pg-none">―</span>') + '</td>';
+    html += '<td>' + (row.t16 || '<span class="pg-none">―</span>') + '</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
 }
 
 // ══════════════════════════════════════════════════
